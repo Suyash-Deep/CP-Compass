@@ -66,7 +66,7 @@ export type ReviewEvidence = {
 };
 
 export type SubmissionReview = {
-  source: "openai" | "offline";
+  source: "groq" | "offline";
   category: string;
   confidence: number;
   summary: string;

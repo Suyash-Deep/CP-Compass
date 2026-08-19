@@ -18,7 +18,13 @@ export async function GET(request: Request) {
     return NextResponse.json(snapshot);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to sync Codeforces right now.";
-    const status = /not found|handle/i.test(message) ? 404 : 502;
+    const status = /not found|handle/i.test(message)
+      ? 404
+      : /rate-limit/i.test(message)
+        ? 429
+        : /too long/i.test(message)
+          ? 504
+          : 502;
     return NextResponse.json({ error: message }, { status });
   }
 }

@@ -105,7 +105,7 @@ export function CPCompassApp() {
     try {
       const response = await fetch(`/api/codeforces?handle=${encodeURIComponent(handle.trim())}`);
       const payload = await response.json() as AnalyticsSnapshot & { error?: string };
-      if (!response.ok) throw new Error(payload.error || "Codeforces sync failed.");
+      if (!response.ok) throw new Error(payload.error || "Codeforces sync failed. Please try again.");
       storeSnapshot(payload);
       setConnectOpen(false);
       setView("overview");
@@ -404,7 +404,7 @@ function ReviewWorkspace({ input, setInput, submit, loading, error, review, visi
           <label>Source code<textarea className="source-input" value={input.code} onChange={(event) => setInput({ ...input, code: event.target.value })} spellCheck={false} /></label>
           {error && <div className="form-error"><CircleAlert size={15} />{error}</div>}
           <button className="primary-action" disabled={loading || !input.code.trim()}>{loading ? <><LoaderCircle className="spin" size={16} />Reviewing logic…</> : <><Sparkles size={16} />Analyze submission</>}</button>
-          <p className="privacy-note">Your code is used only to generate this review. Add `OPENAI_API_KEY` for model analysis; otherwise the local deterministic reviewer runs.</p>
+          <p className="privacy-note">Your code is sent to Groq only to generate this review. Add `GROQ_API_KEY` for free-tier AI analysis; otherwise the local deterministic reviewer runs.</p>
         </form>
 
         <section className={review ? "review-result panel has-review" : "review-result panel"}>
@@ -412,7 +412,7 @@ function ReviewWorkspace({ input, setInput, submit, loading, error, review, visi
             <div className="review-placeholder"><span><SearchCode size={28} /></span><h2>Your diagnosis will appear here</h2><p>The sample submission is ready, so you can try the complete workflow immediately.</p></div>
           ) : (
             <>
-              <div className="diagnosis-head"><div><span className="eyebrow">PRIMARY DIAGNOSIS</span><h2>{titleCase(review.category)}</h2></div><span className={review.source === "openai" ? "source-badge ai" : "source-badge"}>{review.source === "openai" ? "OpenAI" : "Offline engine"}</span></div>
+              <div className="diagnosis-head"><div><span className="eyebrow">PRIMARY DIAGNOSIS</span><h2>{titleCase(review.category)}</h2></div><span className={review.source === "groq" ? "source-badge ai" : "source-badge"}>{review.source === "groq" ? "Groq AI" : "Offline engine"}</span></div>
               <p className="diagnosis-summary">{review.summary}</p>
               <div className="confidence-row"><span>Confidence</span><div><i style={{ width: `${Math.round(review.confidence * 100)}%` }} /></div><strong>{Math.round(review.confidence * 100)}%</strong></div>
               <div className="complexity-grid"><div><span>TIME</span><strong>{review.timeComplexity}</strong></div><div><span>SPACE</span><strong>{review.spaceComplexity}</strong></div></div>
