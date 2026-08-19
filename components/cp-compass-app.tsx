@@ -62,7 +62,7 @@ export function CPCompassApp() {
   const [view, setView] = useState<View>("overview");
   const [snapshot, setSnapshot] = useState<AnalyticsSnapshot>(demoSnapshot);
   const [connectOpen, setConnectOpen] = useState(false);
-  const [handle, setHandle] = useState("deepsuyash022");
+  const [handle, setHandle] = useState("tourist");
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState("");
   const [completed, setCompleted] = useState<Set<string>>(new Set());
@@ -76,7 +76,14 @@ export function CPCompassApp() {
     try {
       const savedSnapshot = localStorage.getItem("cp-compass-snapshot");
       const savedCompleted = localStorage.getItem("cp-compass-completed");
-      if (savedSnapshot) setSnapshot(JSON.parse(savedSnapshot) as AnalyticsSnapshot);
+      if (savedSnapshot) {
+        const parsedSnapshot = JSON.parse(savedSnapshot) as AnalyticsSnapshot;
+        if (parsedSnapshot.mode === "live") setSnapshot(parsedSnapshot);
+        else {
+          setSnapshot(demoSnapshot);
+          localStorage.setItem("cp-compass-snapshot", JSON.stringify(demoSnapshot));
+        }
+      }
       if (savedCompleted) setCompleted(new Set(JSON.parse(savedCompleted) as string[]));
     } catch {
       // A corrupt local preview should never block the application.
@@ -187,7 +194,9 @@ export function CPCompassApp() {
         </div>
 
         <div className="profile-chip">
-          <span className="avatar">{initials}</span>
+          {snapshot.profile.avatar
+            ? <img className="avatar" src={snapshot.profile.avatar} alt={`${snapshot.profile.handle} profile`} />
+            : <span className="avatar">{initials}</span>}
           <span><strong>{snapshot.profile.handle}</strong><small>{snapshot.mode === "live" ? "Codeforces connected" : "Demo workspace"}</small></span>
           <button onClick={() => setConnectOpen(true)} aria-label="Change Codeforces profile">•••</button>
         </div>

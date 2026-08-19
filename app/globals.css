@@ -34,7 +34,7 @@ button { color: inherit; }
 .progress-track, .topic-track { overflow: hidden; height: 5px; background: #3d4e47; border-radius: 999px; }
 .progress-track span { display: block; height: 100%; background: var(--lime); border-radius: inherit; }
 .profile-chip { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 3px 0; }
-.avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #f2c968; color: #2d2a18; font-weight: 800; font-size: 12px; }
+.avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #f2c968; color: #2d2a18; object-fit: cover; font-weight: 800; font-size: 12px; }
 .profile-chip > span:nth-child(2) { display: grid; flex: 1; gap: 3px; }
 .profile-chip strong { font-size: 12px; }
 .profile-chip small { color: #84918c; font-size: 10px; }
